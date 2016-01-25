@@ -1,3 +1,3 @@
-describe "Oyster Card" do
+describe Oystercard do
 
 end
