@@ -24,17 +24,9 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do
-    it 'deducts the value specified from the balance' do
-      value = rand(Oystercard::BALANCE_MAX)
-      oystercard.top_up(value)
-      expect{oystercard.deduct(value)}.to change{ oystercard.balance }.by (-value)
-    end
-  end
-
   describe '#touch_in' do
     it 'sets the oystercard to being in journey' do
-      oystercard.top_up(Oystercard::BALANCE_MIN)
+      oystercard.top_up(Oystercard::FARE_MIN)
       expect(oystercard.touch_in).to eq true
     end
   end
@@ -48,6 +40,12 @@ describe Oystercard do
   describe '#touch_out' do
     it 'sets the oystercard to being off journey' do
       expect(oystercard.touch_out).to eq false
+    end
+  end
+
+  describe '#touch_out' do
+    it 'reduces the balance by the minimum fare' do
+      expect{oystercard.touch_out}.to change { oystercard.balance }.by -Oystercard::FARE_MIN
     end
   end
 
