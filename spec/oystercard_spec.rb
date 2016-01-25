@@ -9,10 +9,18 @@ describe Oystercard do
     end
   end
 
-  describe '::top_up' do
+  describe '#top_up' do
     it 'adds the value specified to the balance' do
-      value = rand(100)
+      value = rand(Oystercard::BALANCE_MAX)
       expect{oystercard.top_up(value)}. to change{ oystercard.balance }.from(0).to(value)
+    end
+  end
+
+  describe '#top_up' do
+    it 'raises an error if topping up more than the max limit' do
+      max_balance = Oystercard::BALANCE_MAX
+      oystercard.top_up(max_balance)
+      expect{ oystercard.top_up(1) }.to raise_error 'Top-up exceeds maximum limit of #{max_balance}'
     end
   end
 
