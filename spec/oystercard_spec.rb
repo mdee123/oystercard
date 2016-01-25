@@ -5,10 +5,18 @@ describe Oystercard do
     expect(subject.balance).to eq(0)
   end
 
-  it 'adds £10 to the balance on the card' do
-    value = 10
-    subject.top_up(value)
-    expect(subject.balance).to eq 10
+  context '#top_up' do
+
+    it 'adds £10 to the balance on the card' do
+      expect{ subject.top_up 10}.to change{subject.balance}.by 10
+    end
+
+    it "has a maximum limit of #{Oystercard::BALANCE_LIMIT} on the card" do
+      message = "Maximum balance limit is #{Oystercard::BALANCE_LIMIT} pounds"
+      expect{subject.top_up ((Oystercard::BALANCE_LIMIT) + 1)}.to raise_error message
+    end
+
   end
+
 
 end
