@@ -18,15 +18,6 @@ describe Oystercard do
 
   end
 
-  context '#deduct' do
-
-    it 'it deducts an amount from the balance' do
-      subject.top_up(10)
-      expect{ subject.deduct 5}.to change{subject.balance}.by -5
-    end
-
-  end
-
   context 'touching in and out of journeys' do
 
     it 'can log when a card has initialized a journey' do
@@ -52,6 +43,12 @@ describe Oystercard do
 
     it 'errors if min balance is below 1' do
       expect {subject.touch_in}.to raise_error 'Insufficient funds'
+    end
+
+    it 'removes min fare from balance during #touch_out' do
+      subject.top_up(10)
+      subject.touch_in
+      expect{subject.touch_out}.to change{subject.balance}.by -1
     end
 
   end
