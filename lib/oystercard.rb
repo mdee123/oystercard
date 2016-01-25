@@ -1,3 +1,5 @@
+require_relative 'station.rb'
+
 class Oystercard
 
   BALANCE_LIMIT = 90
