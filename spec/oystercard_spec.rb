@@ -3,6 +3,7 @@ require 'oystercard'
 describe Oystercard do
 
   let(:station) {double(:station)}
+  let(:station_2) {double(:station_2)}
 
   it 'initially has a balance of zero' do
     expect(subject.balance).to eq(0)
@@ -32,7 +33,7 @@ describe Oystercard do
     it 'can log when a card has ended a journey' do
       subject.top_up 10
       subject.touch_in(station)
-      expect(subject.touch_out).to be nil
+      expect(subject.touch_out(station_2)).to be station_2
     end
 
     it 'can check whether the card is in journey' do
@@ -52,13 +53,27 @@ describe Oystercard do
     it 'removes min fare from balance during #touch_out' do
       subject.top_up(10)
       subject.touch_in(station)
-      expect{subject.touch_out}.to change{subject.balance}.by -1
+      expect{subject.touch_out(station_2)}.to change{subject.balance}.by -1
     end
 
     it 'can add start station to touch in' do
       subject.top_up 10
       subject.touch_in(station)
       expect(subject.entry_station).to eq station
+    end
+  end
+
+  context 'journey history' do
+
+    it 'has an empty journeys list initially' do
+      expect(subject.journeys).to be {}
+    end
+
+    it 'checks that touching in and out creates one journey' do
+      subject.top_up(10)
+      subject.touch_in(station)
+      subject.touch_out(station_2)
+      expect(subject.journeys).to include(station => station_2)
     end
 
   end
