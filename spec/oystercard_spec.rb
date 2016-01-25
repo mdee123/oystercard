@@ -27,5 +27,27 @@ describe Oystercard do
 
   end
 
+  context 'touching in and out of journeys' do
+
+    it 'can log when a card has initialized a journey' do
+      expect(subject.touch_in).to be true
+    end
+
+    it 'can log when a card has ended a journey' do
+      subject.touch_in
+      expect(subject.touch_out).to be false
+    end
+
+    it 'can check whether the card is in journey' do
+      subject.touch_in
+      expect(subject.in_journey?).to be true
+    end
+
+    it 'can check whether the card is initially NOT in journey' do
+      expect(subject.in_journey?).to be false
+    end
+
+  end
+
 
 end
