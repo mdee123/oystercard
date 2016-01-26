@@ -27,34 +27,14 @@ describe Oystercard do
   end
 
   describe '#touch_in(station)' do
-    it 'sets the oystercard to being in journey' do
-      oystercard.top_up(Oystercard::FARE_MIN)
-      oystercard.touch_in(entry_station)
-      expect(oystercard.in_journey?).to eq true
-    end
-  end
-
-  describe '#touch_in(station)' do
     it 'raises an exception if the balance is inferior to £1' do
       expect{ oystercard.touch_in(entry_station) }.to raise_error 'Please top up your card.'
     end
   end
 
   describe '#touch_out' do
-    it 'sets the oystercard to being off journey' do
-      expect(oystercard.in_journey?).to eq false
-    end
-  end
-
-  describe '#touch_out' do
     it 'reduces the balance by the minimum fare' do
       expect{oystercard.touch_out(exit_station)}.to change { oystercard.balance }.by -Oystercard::FARE_MIN
-    end
-  end
-
-  describe '#in_journey?' do
-    it 'checks that when initialised the card is not in journey' do
-      expect(oystercard).to_not be_in_journey
     end
   end
 

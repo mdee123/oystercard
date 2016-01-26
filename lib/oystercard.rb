@@ -1,3 +1,5 @@
+require_relative 'station'
+
 class Oystercard
 
   attr_reader :balance, :entry_station, :exit_station, :journey_list
@@ -28,15 +30,10 @@ class Oystercard
     @exit_station = exit_station
   end
 
-  def in_journey?
-    !!@entry_station
-  end
-
   private
 
   def deduct(value)
     @balance -= value
   end
-
 
 end
