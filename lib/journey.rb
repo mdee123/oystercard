@@ -1,8 +1,9 @@
 require_relative 'oystercard'
 
-PENALTY_FAIR = 6
-
 class Journey
+
+  PENALTY_FARE = 6
+  FARE_MIN = 1
 
   attr_reader :entry_station, :exit_station, :journey_list
 
@@ -31,9 +32,13 @@ class Journey
       @journey_list[@entry_station] = @exit_station
   end
 
-  def penalty_fair
-    PENALTY_FAIR
+  def penalty_fare?
+    (!entry_station || !exit_station)
   end
 
+  def fare
+    return PENALTY_FARE if penalty_fare?
+    FARE_MIN
+  end
 
 end

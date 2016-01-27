@@ -5,7 +5,7 @@ class Oystercard
 
   attr_reader :balance, :journey
   BALANCE_MAX = 90
-  FARE_MIN = 1
+
 
   def initialize(journey = Journey.new)
     @balance = 0
@@ -20,7 +20,7 @@ class Oystercard
 
   def touch_in(entry_station)
     unless journey.in_journey?
-      raise 'Please top up your card.' if @balance < FARE_MIN
+      raise 'Please top up your card.' if @balance < Journey::FARE_MIN
       journey.set_start(entry_station)
     else
       journey.set_journey
@@ -28,7 +28,7 @@ class Oystercard
   end
 
   def touch_out(exit_station)
-    deduct(FARE_MIN)
+    deduct(Journey::FARE_MIN)
     journey.set_exit(exit_station)
     journey.set_journey
   end
