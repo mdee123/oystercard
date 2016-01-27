@@ -1,5 +1,7 @@
 require_relative 'oystercard'
 
+PENALTY_FAIR = 6
+
 class Journey
 
   attr_reader :entry_station, :exit_station, :journey_list
@@ -17,14 +19,21 @@ class Journey
   end
 
   def set_exit(exit_station)
-    @in_journey = false
-    @journey_list[@entry_station] = exit_station
-    @entry_station = nil
     @exit_station = exit_station
   end
 
   def in_journey?
     @in_journey
   end
+
+  def set_journey
+      @in_journey = false
+      @journey_list[@entry_station] = @exit_station
+  end
+
+  def penalty_fair
+    PENALTY_FAIR
+  end
+
 
 end

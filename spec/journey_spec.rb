@@ -37,4 +37,10 @@ describe Journey do
     end
   end
 
+  describe '#penalty_fair' do
+    it "returns the pentalty fair amount" do
+      expect(subject.penalty_fair).to eq 6
+    end
+  end
+
 end

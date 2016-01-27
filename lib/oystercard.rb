@@ -19,13 +19,18 @@ class Oystercard
   end
 
   def touch_in(entry_station)
-    raise 'Please top up your card.' if @balance < FARE_MIN
-    journey.set_start(entry_station)
+    unless journey.in_journey?
+      raise 'Please top up your card.' if @balance < FARE_MIN
+      journey.set_start(entry_station)
+    else
+      journey.set_journey
+    end
   end
 
   def touch_out(exit_station)
     deduct(FARE_MIN)
     journey.set_exit(exit_station)
+    journey.set_journey
   end
 
 
