@@ -31,15 +31,22 @@ describe Journey do
 
   describe '#touch_out' do
     it 'sets the oystercard to being off journey' do
-      subject.set_start(entry_station)
-      subject.set_journey
-      expect(subject.in_journey?).to eq false
+      journey.set_start(entry_station)
+      journey.set_journey
+      expect(journey.in_journey?).to eq false
     end
   end
 
   describe '#fare' do
     it "returns the pentalty fare amount" do
-      expect(subject.fare).to eq 6
+      expect(journey.fare).to eq 6
+    end
+
+    it "returns the minimum fare amount" do
+      journey.set_start(entry_station)
+      journey.set_exit(exit_station)
+      journey.set_journey
+      expect(journey.fare).to eq 1
     end
   end
 
@@ -59,8 +66,8 @@ describe Journey do
     end
 
     it 'checks if the penalty fare should be applied without touch out' do
-      subject.set_start(entry_station)
-      subject.set_journey
+      journey.set_start(entry_station)
+      journey.set_journey
       expect(journey.penalty_fare?).to eq true
     end
   end
