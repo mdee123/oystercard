@@ -1,4 +1,5 @@
 require_relative 'station'
+require_relative 'journey_log'
 require_relative 'journey'
 
 class Oystercard
@@ -7,9 +8,9 @@ class Oystercard
   BALANCE_MAX = 90
 
 
-  def initialize(journey = Journey.new)
+  def initialize(journey_log = JourneyLog.new)
     @balance = 0
-    @journey = journey
+    @journey_log = journey_log
   end
 
   def top_up(value)
@@ -18,18 +19,14 @@ class Oystercard
   end
 
   def touch_in(entry_station)
-    unless journey.in_journey?
-      raise 'Please top up your card.' if @balance < Journey::FARE_MIN
-      journey.set_start(entry_station)
-    else
-      journey.set_journey
-    end
+    raise 'Please top up your card.' if @balance < Journey::FARE_MIN
+    @journey_log.start_journey(entry_station)
   end
 
   def touch_out(exit_station)
     deduct(Journey::FARE_MIN)
-    journey.set_exit(exit_station)
-    journey.set_journey
+    @journey_log.set_exit(exit_station)
+    @journey_log.set_journey
   end
 
 
