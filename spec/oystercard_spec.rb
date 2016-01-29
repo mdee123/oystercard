@@ -1,8 +1,15 @@
 require 'oystercard'
-require 'journey'
+
 
 describe Oystercard do
-  let(:oystercard) {described_class.new(Journey.new)}
+
+  before do
+    allow(journeylog).to receive(:new) {journeylog}
+  end
+
+  let(:journey) {double(:journey)}
+  let(:journeylog) {double(:journeylog)}
+  let(:oystercard) {described_class.new(journeylog(journey))}
   let(:entry_station) {double (:entry_station)}
   let(:exit_station) {double (:exit_station)}
 
@@ -35,31 +42,34 @@ describe Oystercard do
 
     it 'sets an incomplete journey if you touch in twice' do
       oystercard.top_up(10)
+      allow(journey).to receive(:entry_station) {'camden'}
+      allow(journey).to receive(:exit_station) {nil}
       oystercard.touch_in(entry_station)
       oystercard.touch_in(entry_station)
-      expect(oystercard.journey.journey_list).to include(entry_station => nil)
+      expect(oystercard.history).to include({entry_station: 'camden', exit_station: nil})
     end
   end
+  #
+  # describe '#touch_out' do
+  #   it 'reduces the balance by the minimum fare' do
+  #     expect{oystercard.touch_out(exit_station)}.to change { oystercard.balance }.by -Journey::FARE_MIN
+  #   end
+  #
+  #   it 'sets an incomplete journey if you don\'t touch in' do
+  #     oystercard.top_up(10)
+  #     oystercard.touch_out(exit_station)
+  #     expect(oystercard.journey.journey_list).to include(nil => exit_station)
+  #   end
+  # end
+  #
+  #
+  # describe '#entry_station' do
+  #   it 'remembers the entry station after touch in' do
+  #     oystercard.top_up(10)
+  #     oystercard.touch_in(entry_station)
+  #     expect(oystercard.journey.entry_station).to eq entry_station
+  #   end
+  # end
 
-  describe '#touch_out' do
-    it 'reduces the balance by the minimum fare' do
-      expect{oystercard.touch_out(exit_station)}.to change { oystercard.balance }.by -Journey::FARE_MIN
-    end
-
-    it 'sets an incomplete journey if you don\'t touch in' do
-      oystercard.top_up(10)
-      oystercard.touch_out(exit_station)
-      expect(oystercard.journey.journey_list).to include(nil => exit_station)
-    end
-  end
-
-
-  describe '#entry_station' do
-    it 'remembers the entry station after touch in' do
-      oystercard.top_up(10)
-      oystercard.touch_in(entry_station)
-      expect(oystercard.journey.entry_station).to eq entry_station
-    end
-  end
 
 end
